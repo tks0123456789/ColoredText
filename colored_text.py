@@ -58,7 +58,7 @@ class ColoredText(object):
     
     def disp_one_line(self, ax, subtext, subvals, height):
         cl_s = cm.bwr(subvals)
-        for i, (ch, val, cl) in enumerate(zip(subtext, subvals, cl_s)):
+        for i, (ch, cl) in enumerate(zip(subtext, cl_s)):
             ax.text(0.01 + i * self.font_rw, height, ch,
                     fontname=self.fontname,
                     fontsize=self.fontsize,
