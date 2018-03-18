@@ -12,11 +12,11 @@ class ColoredText(object):
     text: a sequence of characters
     vals: a float vector, (-1 , 1), The same length as text
     width: image width
-    fontsize: Most configs are for fontsize=14
+    fontsize: 
     fontname: nonproportional fontname
     disp_colorbar:
-    
-    TODO:Fix margins for fontsize>16 and <12 
+
+    TODO:Fix margins.The margins are correct only for width=1080 and fontsize=14.
     """
     def __init__(self, text, vals, width, fontsize,
                  fontname='Source Code Pro',
@@ -30,11 +30,11 @@ class ColoredText(object):
         self.disp_colorbar = disp_colorbar
         #
         self.font_w = fontsize
-        self.font_h = 1.9 * self.font_w 
+        self.font_h = 1.9 * self.font_w
         self.text_w = 0.95 * width
         self.cnt_oneline = int(self.text_w / self.font_w) - 1
         self.text_h = np.ceil(len(text) / self.cnt_oneline) * self.font_h
-        
+
         if self.disp_colorbar:
             self.text_h += .7 * self.font_h
             self.height = self.text_h + 50
@@ -42,20 +42,20 @@ class ColoredText(object):
         else:
             self.height = self.text_h + 30
             self.text_bottom = 0
-        
+
         self.text_rh = self.text_h / self.height
         self.figsize_y = self.height / 90
         self.suptitle_y = 1 - 10 / self.height
-                 
+
         self.font_rw = self.font_w / self.text_w
         self.font_rh = self.font_h / self.text_h
         self.text_val = self.split(self.cnt_oneline)
-       
+
     def split(self, cnt):
         text_val = [(self.text[i:i+cnt], self.vals[i:i+cnt]) \
                     for i in range(0, len(self.text), cnt)]
         return text_val
-    
+
     def disp_one_line(self, ax, subtext, subvals, height):
         cl_s = cm.bwr(subvals)
         for i, (ch, cl) in enumerate(zip(subtext, cl_s)):
@@ -65,7 +65,7 @@ class ColoredText(object):
                     bbox={'facecolor':cl, 'edgecolor':cl,
                           'alpha':0.8, 'pad':1})
         return ax
-    
+
     def display(self, title=None, savefile=None):
         fig = plt.figure(figsize=(self.figsize_x, self.figsize_y), dpi=90)
         if title is not None:
@@ -86,7 +86,7 @@ class ColoredText(object):
             cax.set_xticks([0, 25, 50, 75, 100])
             cax.set_xticklabels(map(str, (cax.get_xticks() - 50) / 50))
             cax.get_yaxis().set_visible(False)
-        
+
         if savefile is None:
             plt.show()
         else:
@@ -97,23 +97,20 @@ class ColoredText(object):
 
 if __name__ == '__main__':
     from itertools import product
-    save = True
+    SAVE = True
     savefile = None
     paramsgrid = product([10, 113, 375, 819],# num of chars
                          [540, 1080],        # image width
                          [10, 14, 18],       # fontsize
                          [True, False])      # disp_colorbar
-    
+
     for n, width, fontsize, disp_colorbar in paramsgrid:
         text = ''.join([str(i % 10) for i in range(n)])
         vals = (np.random.randn(n) / 5).clip(-1, 1)
         title = 'n:{:d} width:{:d} fontsize:{:d} cbar:{:d}'.format(\
                    n, width, fontsize, disp_colorbar)
-        if save:
+        if SAVE:
             savefile = 'img/' + title.replace(':', '').replace(' ', '_')
         ct = ColoredText(text, vals, width, fontsize,
-                          disp_colorbar=disp_colorbar)
+                         disp_colorbar=disp_colorbar)
         ct.display(title=title, savefile=savefile)
-        
-
-        
