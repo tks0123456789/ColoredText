@@ -7,12 +7,13 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
 
+
 class ColoredText(object):
     """
     text: a sequence of characters
     vals: a float vector, (-1 , 1), The same length as text
     width: image width
-    fontsize: 
+    fontsize:
     fontname: nonproportional fontname
     disp_colorbar:
 
@@ -23,7 +24,7 @@ class ColoredText(object):
                  disp_colorbar=True):
         assert len(text) == len(vals)
         self.text = text
-        self.vals = (vals + 1) / 2 # (-1,1) to (0, 1)
+        self.vals = (vals + 1) / 2  # (-1,1) to (0, 1)
         self.figsize_x = width / 90
         self.fontsize = fontsize
         self.fontname = fontname
@@ -52,7 +53,7 @@ class ColoredText(object):
         self.text_val = self.split(self.cnt_oneline)
 
     def split(self, cnt):
-        text_val = [(self.text[i:i+cnt], self.vals[i:i+cnt]) \
+        text_val = [(self.text[i:i+cnt], self.vals[i:i+cnt])
                     for i in range(0, len(self.text), cnt)]
         return text_val
 
@@ -62,8 +63,8 @@ class ColoredText(object):
             ax.text(0.01 + i * self.font_rw, height, ch,
                     fontname=self.fontname,
                     fontsize=self.fontsize,
-                    bbox={'facecolor':cl, 'edgecolor':cl,
-                          'alpha':0.8, 'pad':1})
+                    bbox={'facecolor': cl, 'edgecolor': cl,
+                          'alpha': 0.8, 'pad': 1})
         return ax
 
     def display(self, title=None, savefile=None):
@@ -94,20 +95,19 @@ class ColoredText(object):
         plt.close()
 
 
-
 if __name__ == '__main__':
     from itertools import product
     SAVE = True
     savefile = None
-    paramsgrid = product([10, 113, 375, 819],# num of chars
-                         [540, 1080],        # image width
-                         [10, 14, 18],       # fontsize
-                         [True, False])      # disp_colorbar
+    paramsgrid = product([10, 113, 375, 819],  # num of chars
+                         [540, 1080],          # image width
+                         [10, 14, 18],         # fontsize
+                         [True, False])        # disp_colorbar
 
     for n, width, fontsize, disp_colorbar in paramsgrid:
         text = ''.join([str(i % 10) for i in range(n)])
         vals = (np.random.randn(n) / 5).clip(-1, 1)
-        title = 'n:{:d} width:{:d} fontsize:{:d} cbar:{:d}'.format(\
+        title = 'n:{:d} width:{:d} fontsize:{:d} cbar:{:d}'.format(
                    n, width, fontsize, disp_colorbar)
         if SAVE:
             savefile = 'img/' + title.replace(':', '').replace(' ', '_')
